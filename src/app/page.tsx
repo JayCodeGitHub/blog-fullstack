@@ -1,6 +1,9 @@
 import Navbar from "@/components/navbar";
+import { prisma } from "@/lib/prisma";
 
-export default function Home() {
+export default async function Home() {
+  let posts = await prisma.post.findMany({ orderBy: { id: "desc" } });
+
   return (
     <main>
       <Navbar />
