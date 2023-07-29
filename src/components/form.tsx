@@ -1,6 +1,23 @@
-export default function Form() {
+import { prisma } from "@/lib/prisma";
+
+export default function Form({ afterSave }: any) {
+  async function createPost(data: Iterable<readonly [PropertyKey, any]>) {
+    "use server";
+
+    let { title, content } = Object.fromEntries(data);
+
+    let post = await prisma.post.create({
+      data: {
+        title,
+        content,
+      },
+    });
+
+    await afterSave(post);
+  }
+
   return (
-    <form className="w-full max-w-3xl mt-4 space-y-4">
+    <form action={createPost} className="w-full max-w-3xl mt-4 space-y-4">
       <div>
         <input
           className="w-full"
